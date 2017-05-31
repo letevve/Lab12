@@ -18,9 +18,8 @@ public class Model {
 			this.listaRiver= rd.getAllRivers();
 		}
 		else{
-			System.out.println("Lista già popolata.\n");
 		}
-		System.out.println("Dal model: " + listaRiver.toString());
+		//System.out.println("Dal model: " + listaRiver.toString());
 		return listaRiver;
 	}
 	
@@ -55,6 +54,11 @@ public class Model {
 		ris.add(""+media);
 		
 		return ris;
+	}
+
+	public List<Flow> getFlows(River river) {
+		// TODO Auto-generated method stub
+		return rd.getSingleFlow(river);
 	}
 
 }

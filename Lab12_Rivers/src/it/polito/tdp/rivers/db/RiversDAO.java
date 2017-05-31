@@ -33,7 +33,7 @@ public class RiversDAO {
 			// e.printStackTrace();
 			throw new RuntimeException();
 		}
-		System.out.println("Dal DAO: " + rivers.toString());
+		//System.out.println("Dal DAO: " + rivers.toString());
 		return rivers;
 	}
 	

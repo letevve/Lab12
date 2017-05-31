@@ -8,8 +8,12 @@ import java.net.URL;
 import java.util.*;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.rivers.model.Event;
+import it.polito.tdp.rivers.model.Event.EventType;
+import it.polito.tdp.rivers.model.Flow;
 import it.polito.tdp.rivers.model.Model;
 import it.polito.tdp.rivers.model.River;
+import it.polito.tdp.rivers.model.Simulatore;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -20,6 +24,8 @@ import javafx.scene.control.TextField;
 public class RiversController {
 	
 	private Model model;
+	private Simulatore st = new Simulatore();
+	private double media;
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -53,18 +59,25 @@ public class RiversController {
 
     @FXML
     void doSimula(ActionEvent event) {
-
+    	for(Flow f : model.getFlows(boxRiver.getValue())){
+    		Event e = new Event (f.getDay(), f.getFlow(), EventType.INGRESSO );
+    		st.addEvent(e);
+    	}
+    	String ris = st.run(media, Double.parseDouble(txtK.getText()));
+    	
+    	txtResult.setText(ris);
     }
     
     @FXML
     void doRiempi(ActionEvent event) {
-    	//txtResult.setText("Ciaone");
+    	
     	List<String> ris = model.getCampi(boxRiver.getValue());
     	
     	txtStartDate.setText(ris.get(0));
     	txtEndDate.setText(ris.get(1));
     	txtNumMeasurements.setText(ris.get(2));
     	txtFMed.setText(ris.get(3));
+    	media = Double.parseDouble(ris.get(3));
     }
     
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -84,7 +97,7 @@ public class RiversController {
 		// TODO Auto-generated method stub
 		this.model=model;
 		model.getRivers();
-		System.out.println("Sto per aggiungere i fiumi alla combobox");
+		//System.out.println("Sto per aggiungere i fiumi alla combobox");
 		boxRiver.getItems().addAll(model.getRivers());
 	}
 }
