@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class RiversDAO {
 
@@ -32,8 +33,34 @@ public class RiversDAO {
 			// e.printStackTrace();
 			throw new RuntimeException();
 		}
-
+		System.out.println("Dal DAO: " + rivers.toString());
 		return rivers;
+	}
+	
+	public List<Flow> getSingleFlow(River river){
+		final String sql = "SELECT id, day, flow, river FROM flow WHERE river = ?";
+		
+		List<Flow> flows = new LinkedList<Flow>();
+		
+		try {
+			Connection conn = DBConnect.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, river.getId());
+			ResultSet res = st.executeQuery();
+
+			while (res.next()) {
+				flows.add(new Flow(res.getDate("day").toLocalDate(), res.getDouble("flow"), river));
+			}
+
+			conn.close();
+
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			throw new RuntimeException();
+		}
+
+		return flows;
+		
 	}
 
 	public List<Flow> getAllFlows(List<River> rivers) {
@@ -61,7 +88,7 @@ public class RiversDAO {
 		return flows;
 	}
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		RiversDAO dao = new RiversDAO();
 
 		List<River> rivers = dao.getAllRivers();
@@ -70,6 +97,7 @@ public class RiversDAO {
 		List<Flow> flows = dao.getAllFlows(rivers);
 		System.out.format("Loaded %d flows\n", flows.size());
 		// System.out.println(flows) ;
-	}
+	} */
+
 
 }
